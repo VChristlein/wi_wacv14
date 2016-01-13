@@ -30,7 +30,7 @@ def parserArguments(parser):
                         help='number of cluster-centers = size of vocabulary')
     parser.add_argument('--vocabulary_filename', default='ubm',\
                         help='write vocabulary to this file')
-    parser.add_argument('--method', default='mini-kmeans',\
+    parser.add_argument('--method', default='gmm',\
                         choices=['gmm'],
                         help=('method for clustering'))
     parser.add_argument('--iterations', type=int, default=100,\
