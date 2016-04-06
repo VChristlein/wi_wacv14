@@ -12,7 +12,7 @@ Required Python-Packages: progressbar, OpenCV Version 2.4.x
 
 ## Workflow 
 The identification uses 3 steps.  In advance you need to create a label-file for your data, which contains
-in each row the name of the image-file and the label (i.e. the writer id).
+in each row the name of the image-file and the label (i.e. the writer id). (*Update* I provided label-files, see \*.txt files.)
 
 * 1. Feature Extraction (feat_ex.py) of test and train data
 
