@@ -26,7 +26,7 @@ def parserArguments(parser):
     parser.add_argument('--max_descriptors', nargs='*',
                         type=int, default=[150000],
                         help='load maximum descriptors')
-    parser.add_argument('--num_clusters', type=int, default=500,\
+    parser.add_argument('--num_clusters', type=int, default=100,\
                         help='number of cluster-centers = size of vocabulary')
     parser.add_argument('--vocabulary_filename', default='ubm',\
                         help='write vocabulary to this file')
