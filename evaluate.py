@@ -15,7 +15,7 @@ def computeDistance(X, Y, method):
 
     return dist
 
-def computeDistances(descriptors, method, parallel=True,
+def computeDistances(descriptors, method, parallel, nprocs,
                      distance_func=None):
     num_desc = len(descriptors)
 
@@ -36,7 +36,7 @@ def computeDistances(descriptors, method, parallel=True,
         return dists
 
     if parallel:
-        dists = pc.parmap(loop, splits)
+        dists = pc.parmap(loop, splits, nprocs)
     else:
         dists = map(loop, splits) 
   
@@ -100,7 +100,7 @@ def computeStats( name, dist_matrix, labels,
     
     return top1, mAP
 
-def runNN(descriptors, labels, parallel):
+def runNN(descriptors, labels, parallel, nprocs):
     """
     compute nearest neighbor from specific descriptors, given labels
     """
@@ -109,7 +109,7 @@ def runNN(descriptors, labels, parallel):
     ret_matrix = None
     for name, method in distance_method.iteritems():
         dist_matrix = computeDistances(descriptors, method, 
-                                           parallel)
+                                           parallel, nprocs)
 
         computeStats(name, dist_matrix, labels, parallel)
         ret_matrix = dist_matrix
