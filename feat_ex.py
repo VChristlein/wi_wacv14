@@ -6,6 +6,7 @@ import argparse
 import cPickle
 import gzip
 import cv2
+import numpy as np
 
 """
 extract features for images
@@ -71,7 +72,16 @@ if __name__ == '__main__':
             return
 
         kpts = fe.detect(img)
-        kpts, descriptors = fe.extract(img, kpts)
+        _, descriptors = fe.extract(img, kpts)
+        
+        if descriptors is None or len(descriptors) == 0:
+            print 'WARNING: no descriptors extracted, skip image', img_file
+            sys.exit(1)
+
+        # Hellinger normalization
+        descriptors += np.finfo(np.float32).eps
+        descriptors /= np.sum(descriptors, axis=1)[:,np.newaxis]
+        descriptors = np.sqrt(descriptors)
 
         # output
         new_basename = os.path.join(args.outputfolder,
@@ -84,7 +94,7 @@ if __name__ == '__main__':
         progress.update(i+1)
 
     if args.parallel:
-        pc.parmap(compute, range(len(files)))
+        pc.parmap(compute, range(len(files)), args.nprocs)
     else:
         map(compute, range(len(files)))
     progress.finish()
