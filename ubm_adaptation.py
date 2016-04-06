@@ -23,7 +23,7 @@ def parserArguments(parser):
     ubm_group.add_argument('--normalize', nargs='*', default=[],
                         choices=['l2g','l2c','ssr'],
                         help='normalization options')
-     ubm_group.add_argument('-r', '--relevance',type=int, default=16,\
+    ubm_group.add_argument('-r', '--relevance',type=int, default=16,\
                         help=('relevance factor for mixing feature vectors'\
                               ' with UBM'))
     parser.add_argument('--update', default='wmc',\
@@ -117,7 +117,7 @@ if __name__ == '__main__':
                                       hellinger=args.hellinger,
                                       min_descs_per_file=args.min_descs,
                                       show_progress= True)
-        if features == None:
+        if features is None:
             print 'WARNING: features==None ?!'
             progress.update(i+1)
             return 0.0
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 
     progress.start()
     if args.parallel:
-        all_enc = zip( *pc.parmap( encode, range(num_descr) ) )
+        all_enc = zip( *pc.parmap( encode, range(num_descr), args.nprocs ) )
     else:
         all_enc = zip( *map( encode, range(num_descr) ) )
     
@@ -154,8 +154,9 @@ if __name__ == '__main__':
     all_enc = np.concatenate(all_enc, axis=0).astype(np.float32)
     
     print 'Evaluation:'
-    ret_matrix = evaluate.runNN( all_enc , labels, parallel=args.parallel )    
-    if ret_matrix != None:
+    ret_matrix = evaluate.runNN( all_enc , labels, parallel=args.parallel,
+                                nprocs=args.nprocs )    
+    if ret_matrix is not None:
         fpath = os.path.join(args.outputfolder, 'dist' + identifier + '.cvs')
         np.savetxt(fpath, ret_matrix, delimiter=',')
 
